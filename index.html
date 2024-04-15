@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Attendance System</h1>
+        <form id="upload-form" action="/check_presence" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <input type="file" name="image" id="image" accept="image/*">
+            </div>
+            <div class="form-group">
+                <button type="submit">Take Photo</button>
+            </div>
+        </form>
+        <div id="result" class="hidden"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#upload-form').submit(function(event) {
+                event.preventDefault();
+                var formData = new FormData($(this)[0]);
+
+                $.ajax({
+                    url: '/check_presence',
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(response) {
+                        $('#result').text('Status: ' + response.status);
+                        $('#result').removeClass('hidden');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
